@@ -1,7 +1,11 @@
 import React from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaHotel, FaCreditCard, FaPaypal } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const UserProfile = () => {
+  const navigate = useNavigate();
+  
   const user = {
     name: "Marcos",
     email: "juan.perez@example.com",
@@ -36,122 +40,146 @@ const UserProfile = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.box}>
-        <h2 style={styles.title}>Perfil del Usuario</h2>
+    <Container>
+      <BackButton onClick={() => navigate('/principal')}>⬅ Volver a Principal</BackButton>
+      <Box>
+        <Title>Perfil del Usuario</Title>
 
-        <section style={styles.section}>
-          <h3 style={styles.sectionTitle}><FaUser /> Información Personal</h3>
-          <p style={styles.infoText}><FaUser /> <strong>Nombre:</strong> {user.name}</p>
-          <p style={styles.infoText}><FaEnvelope /> <strong>Email:</strong> {user.email}</p>
-          <p style={styles.infoText}><FaPhone /> <strong>Teléfono:</strong> {user.phone}</p>
-        </section>
+        <Section>
+          <SectionTitle><FaUser /> Información Personal</SectionTitle>
+          <InfoText><FaUser /> <strong>Nombre:</strong> {user.name}</InfoText>
+          <InfoText><FaEnvelope /> <strong>Email:</strong> {user.email}</InfoText>
+          <InfoText><FaPhone /> <strong>Teléfono:</strong> {user.phone}</InfoText>
+        </Section>
 
-        <section style={styles.section}>
-          <h3 style={styles.sectionTitle}><FaHotel /> Reservas</h3>
+        <Section>
+          <SectionTitle><FaHotel /> Reservas</SectionTitle>
           {user.bookings.length ? (
-            <ul style={styles.list}>
+            <List>
               {user.bookings.map((booking) => (
-                <li key={booking.id} style={styles.listItem}>
-                  <h4 style={styles.listItemTitle}><FaHotel /> {booking.hotelName}</h4>
-                  <p style={styles.infoText}><strong>Check-In:</strong> {booking.checkIn}</p>
-                  <p style={styles.infoText}><strong>Check-Out:</strong> {booking.checkOut}</p>
-                  <p style={styles.infoText}><strong>Estado:</strong> {booking.status}</p>
-                </li>
+                <ListItem key={booking.id}>
+                  <ListItemTitle><FaHotel /> {booking.hotelName}</ListItemTitle>
+                  <InfoText><strong>Check-In:</strong> {booking.checkIn}</InfoText>
+                  <InfoText><strong>Check-Out:</strong> {booking.checkOut}</InfoText>
+                  <InfoText><strong>Estado:</strong> {booking.status}</InfoText>
+                </ListItem>
               ))}
-            </ul>
+            </List>
           ) : (
-            <p style={styles.infoText}>No tienes reservas.</p>
+            <InfoText>No tienes reservas.</InfoText>
           )}
-        </section>
+        </Section>
 
-        <section style={styles.section}>
-          <h3 style={styles.sectionTitle}><FaCreditCard /> Métodos de Pago</h3>
+        <Section>
+          <SectionTitle><FaCreditCard /> Métodos de Pago</SectionTitle>
           {user.paymentMethods.length ? (
-            <ul style={styles.list}>
+            <List>
               {user.paymentMethods.map((method, index) => (
-                <li key={index} style={styles.listItem}>
-                  <p style={styles.infoText}><strong>Tipo:</strong> {method.type === "Credit Card" ? <FaCreditCard /> : <FaPaypal />} {method.type}</p>
+                <ListItem key={index}>
+                  <InfoText><strong>Tipo:</strong> {method.type === "Credit Card" ? <FaCreditCard /> : <FaPaypal />} {method.type}</InfoText>
                   {method.type === "Credit Card" ? (
                     <>
-                      <p style={styles.infoText}><strong>Últimos 4 dígitos:</strong> {method.last4}</p>
-                      <p style={styles.infoText}><strong>Expiración:</strong> {method.expiration}</p>
+                      <InfoText><strong>Últimos 4 dígitos:</strong> {method.last4}</InfoText>
+                      <InfoText><strong>Expiración:</strong> {method.expiration}</InfoText>
                     </>
                   ) : (
-                    <p style={styles.infoText}><strong>Email:</strong> {method.email}</p>
+                    <InfoText><strong>Email:</strong> {method.email}</InfoText>
                   )}
-                </li>
+                </ListItem>
               ))}
-            </ul>
+            </List>
           ) : (
-            <p style={styles.infoText}>No tienes métodos de pago registrados.</p>
+            <InfoText>No tienes métodos de pago registrados.</InfoText>
           )}
-        </section>
-      </div>
-    </div>
+        </Section>
+      </Box>
+    </Container>
   );
 };
 
-const styles = {
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-    background: 'linear-gradient(to bottom, #1A3C40, #254559)',
-    color: '#F2ECD8',
-    fontFamily: 'Lato, sans-serif',
-  },
-  box: {
-    backgroundColor: '#1c1c1c',
-    padding: '30px',
-    borderRadius: '10px',
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)',
-    maxWidth: '600px',
-    width: '100%',
-  },
-  title: {
-    fontFamily: 'Playfair Display, serif',
-    fontSize: '2em',
-    color: '#A7D9D4',
-    textAlign: 'center',
-    marginBottom: '20px',
-  },
-  section: {
-    marginBottom: '20px',
-  },
-  sectionTitle: {
-    fontSize: '1.5em',
-    color: '#A7D9D4',
-    marginBottom: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  infoText: {
-    fontSize: '1em',
-    color: '#F2ECD8',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  list: {
-    listStyle: 'none',
-    padding: '0',
-  },
-  listItem: {
-    backgroundColor: '#2C3E50',
-    padding: '15px',
-    borderRadius: '5px',
-    marginBottom: '10px',
-  },
-  listItemTitle: {
-    fontSize: '1.2em',
-    color: '#A7D9D4',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-};
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #1A3C40, #254559);
+  color: #F2ECD8;
+  font-family: 'Lato', sans-serif;
+  position: relative;
+`;
+
+const BackButton = styled.button`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  color: #A7D9D4;
+  font-size: 1em;
+  cursor: pointer;
+  font-weight: bold;
+  &:hover {
+    color: #F2ECD8;
+  }
+`;
+
+const Box = styled.div`
+  background-color: #1c1c1c;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 100%;
+`;
+
+const Title = styled.h2`
+  font-family: 'Playfair Display', serif;
+  font-size: 2em;
+  color: #A7D9D4;
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const Section = styled.section`
+  margin-bottom: 20px;
+`;
+
+const SectionTitle = styled.h3`
+  font-size: 1.5em;
+  color: #A7D9D4;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const InfoText = styled.p`
+  font-size: 1em;
+  color: #F2ECD8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const ListItem = styled.li`
+  background-color: #2C3E50;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+`;
+
+const ListItemTitle = styled.h4`
+  font-size: 1.2em;
+  color: #A7D9D4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
 
 export default UserProfile;

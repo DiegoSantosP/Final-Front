@@ -1,24 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
+
+  // Estados para manejar los valores y mensajes
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+
+    // Validación básica
+    if (!username || !password) {
+      setError('Todos los campos son requeridos');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    // Si todo está bien, mostrar mensaje de éxito
+    setMessage('¡Login exitoso! Bienvenido.');
+  };
 
   return (
     <Container>
       <BackButton onClick={() => navigate('/principal')}>⬅ Volver a Principal</BackButton>
       <Box>
-        <Title>Login</Title>
-        <Form>
+        <Title>Iniciar sesión</Title>
+        <Form onSubmit={handleSubmit}>
           <Label htmlFor="username">Usuario:</Label>
-          <Input type="text" id="username" placeholder="Escribe tu nombre de usuario" />
+          <Input
+            type="text"
+            id="username"
+            placeholder="Escribe tu nombre de usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
           <Label htmlFor="password">Contraseña:</Label>
-          <Input type="password" id="password" placeholder="Escribe tu contraseña" />
+          <Input
+            type="password"
+            id="password"
+            placeholder="Escribe tu contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          <Button>Login</Button>
+          <Button type="submit">Iniciar sesión</Button>
         </Form>
+        {error && <MessageError>{error}</MessageError>}
+        {message && <MessageSuccess>{message}</MessageSuccess>}
+        
+        <LinkContainer>
+          <StyledLink to="/Register">¿No tienes una cuenta? Regístrate aquí</StyledLink>
+        </LinkContainer>
       </Box>
     </Container>
   );
@@ -103,6 +147,35 @@ const Button = styled.button`
 
   &:hover {
     background-color: #7CAAA5;
+  }
+`;
+
+const MessageError = styled.p`
+  color: red;
+  font-size: 1em;
+  margin-top: 20px;
+  text-align: center;
+`;
+
+const MessageSuccess = styled.p`
+  color: green;
+  font-size: 1em;
+  margin-top: 20px;
+  text-align: center;
+`;
+
+const LinkContainer = styled.div`
+  margin-top: 20px;
+  text-align: center;
+`;
+
+const StyledLink = styled(Link)`
+  color: #A7D9D4;
+  font-size: 1em;
+  font-weight: bold;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
   }
 `;
 

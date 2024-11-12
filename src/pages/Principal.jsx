@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import HotelSearch from '../components/HotelSearch';
 
 const Ppal = () => {
   const [showFilters, setShowFilters] = React.useState(false);
-  const [priceRange, setPriceRange] = React.useState(1500); // Rango de precio por defecto
-  const [starRating, setStarRating] = React.useState(''); // Filtro por estrellas
+  const [priceRange, setPriceRange] = React.useState(1500); 
+  const [starRating, setStarRating] = React.useState('1'); 
   const [selectedHotel, setSelectedHotel] = React.useState(null);
+  const [destination, setDestination] = React.useState('');
+  const [checkInDate, setCheckInDate] = React.useState('');
+  const [checkOutDate, setCheckOutDate] = React.useState('');
 
   const handleHotelClick = (hotel) => {
     setSelectedHotel(hotel);
@@ -19,6 +23,15 @@ const Ppal = () => {
       setStarRating(e.target.value);
     }
   };
+
+  const handleSearch = () => {
+    const filteredHotels = hotels.filter(hotel => 
+      hotel.location.toLowerCase().includes(destination.toLowerCase()) || 
+      hotel.name.toLowerCase().includes(destination.toLowerCase())
+    );
+    <HotelSearch /> 
+  };
+  
 
   const hotels = [
     { name: 'Sofitel Legend Santa Clara', location: 'Cartagena', stars: 5, price: 1000, image: 'imagenes/Hotel1.jpg' },
@@ -47,7 +60,7 @@ const Ppal = () => {
           <Link to="/Ofertas" style={styles.navLink}>Ofertas</Link>
           <Link to="/Contactos" style={styles.navLink}>Contacto</Link>
           <Link to="/AcercaDe" style={styles.navLink}>Acerca de Nosotros</Link>
-          <Link to="/Test" style={styles.navLink}>Tex</Link>
+          <Link to="/Test" style={styles.navLink}>Test</Link>
           <Link to="/Profile" style={styles.navLink}>Profile</Link>
         </nav>
         <div style={styles.authButtons}>
@@ -60,10 +73,28 @@ const Ppal = () => {
         <section style={styles.searchSection}>
           <h1 style={styles.title}>Compara precios de hoteles alrededor del mundo</h1>
           <div style={styles.searchBar}>
-            <input type="text" placeholder="Destino" style={styles.input} />
-            <input type="date" placeholder="Check-in" style={styles.input} />
-            <input type="date" placeholder="Check-out" style={styles.input} />
-            <button style={styles.searchButton}>Buscar</button>
+            <input 
+              type="text" 
+              placeholder="Destino" 
+              style={styles.input} 
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)} 
+            />
+            <input 
+              type="date" 
+              placeholder="Check-in" 
+              style={styles.input} 
+              value={checkInDate}
+              onChange={(e) => setCheckInDate(e.target.value)} 
+            />
+            <input 
+              type="date" 
+              placeholder="Check-out" 
+              style={styles.input} 
+              value={checkOutDate}
+              onChange={(e) => setCheckOutDate(e.target.value)} 
+            />
+            <button style={styles.searchButton} onClick={handleSearch}>Buscar</button>
           </div>
         </section>
 
@@ -72,7 +103,6 @@ const Ppal = () => {
             {showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'}
           </button>
         </div>
-
         {showFilters && (
           <motion.div
             style={styles.filterPanel}
@@ -94,19 +124,20 @@ const Ppal = () => {
               />
             </div>
             <div style={styles.filterOption}>
-              <label>Clasificación de Estrellas:</label>
-              <select name="starRating" value={starRating} onChange={handleFilterChange} style={styles.filterInput}>
-                <option value="">Cualquiera</option>
-                <option value="1">1 Estrella</option>
-                <option value="2">2 Estrellas</option>
-                <option value="3">3 Estrellas</option>
-                <option value="4">4 Estrellas</option>
-                <option value="5">5 Estrellas</option>
-              </select>
+              <label>Clasificación de Estrellas: {starRating} Estrellas</label>
+              <input
+                type="range"
+                min="1"
+                max="5"
+                value={starRating}
+                name="starRating"
+                onChange={handleFilterChange}
+                style={styles.filterInput}
+              />
             </div>
           </motion.div>
         )}
-
+  
         <section style={styles.results}>
           <h2 style={styles.subtitle}>Resultados de búsqueda</h2>
           <div style={styles.hotelList}>
@@ -122,9 +153,6 @@ const Ppal = () => {
                 <h3 style={styles.hotelName}>{hotel.name} ({hotel.location})</h3>
                 <p style={styles.hotelInfo}>Reputación: {hotel.stars} Estrellas</p>
                 <p style={styles.hotelInfo}>{hotel.price} USD por noche</p>
-                <a href={hotel.url} target="_blank" rel="noopener noreferrer" style={styles.hotelLink}>
-                  Ver detalles
-                </a>
               </motion.div>
             ))}
           </div>
@@ -138,7 +166,10 @@ const Ppal = () => {
               <p>{selectedHotel.location}</p>
               <p>{selectedHotel.stars} Estrellas</p>
               <p>{selectedHotel.price} USD por noche</p>
-              <button onClick={() => setSelectedHotel()}style={styles.reserveButton}>Reservar ahora</button>
+              <p>Fechas: {checkInDate} - {checkOutDate}</p>
+              <button onClick={() => {
+                alert(`Reservando ${selectedHotel.name} del ${checkInDate} al ${checkOutDate}`);
+              }} style={styles.reserveButton}>Reservar ahora</button>
               <button onClick={() => setSelectedHotel(null)} style={styles.closeButton}>Cerrar</button>
             </div>
           </div>
@@ -153,7 +184,6 @@ const Ppal = () => {
     </div>
   );
 };
-
 
 const styles = {
   body: {
@@ -339,6 +369,7 @@ const styles = {
     padding: '10px 20px',
     fontSize: '1.2em',
     marginTop: '20px',
+    marginRight: '10px',
     borderRadius: '5px',
   },
   closeButton: {
@@ -347,10 +378,9 @@ const styles = {
     border: 'none',
     padding: '10px 20px',
     fontSize: '1.2em',
-    marginTop: '20px', 
-    marginBottom: '10px', 
+    marginTop: '20px',
+    marginBottom: '10px',
     borderRadius: '5px',
-    
   },
   
   footer: {

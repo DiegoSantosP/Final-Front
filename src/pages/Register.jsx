@@ -1,27 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
   const navigate = useNavigate();
+
+  // Estados para manejar los valores y mensajes
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+
+    // Validación básica
+    if (!username || !email || !password) {
+      setError('Todos los campos son requeridos');
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(email)) {
+      setError('Por favor ingresa un correo electrónico válido');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    // Si todo está bien, mostrar mensaje de éxito
+    setMessage('¡Registro exitoso! Ahora puedes iniciar sesión.');
+  };
 
   return (
     <Container>
       <BackButton onClick={() => navigate('/principal')}>⬅ Volver a Principal</BackButton>
       <Box>
         <Title>Registro</Title>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Label htmlFor="username">Usuario:</Label>
-          <Input type="text" id="username" placeholder="Escribe tu nombre de usuario" />
+          <Input
+            type="text"
+            id="username"
+            placeholder="Escribe tu nombre de usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
           <Label htmlFor="email">Email:</Label>
-          <Input type="email" id="email" placeholder="Escribe tu email" />
+          <Input
+            type="email"
+            id="email"
+            placeholder="Escribe tu email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
           <Label htmlFor="password">Contraseña:</Label>
-          <Input type="password" id="password" placeholder="Escribe tu contraseña" />
+          <Input
+            type="password"
+            id="password"
+            placeholder="Escribe tu contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          <Button>Registrar</Button>
+          <Button type="submit">Registrar</Button>
         </Form>
+        {error && <MessageError>{error}</MessageError>}
+        {message && <MessageSuccess>{message}</MessageSuccess>}
+
+        <LinkText to="/login">¿Ya tienes una cuenta? Inicia sesión aquí</LinkText>
       </Box>
     </Container>
   );
@@ -103,9 +158,36 @@ const Button = styled.button`
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin: 20px;
 
   &:hover {
     background-color: #7CAAA5;
+  }
+`;
+
+const MessageError = styled.p`
+  color: red;
+  font-size: 1em;
+  margin-top: 20px;
+  text-align: center;
+`;
+
+const MessageSuccess = styled.p`
+  color: green;
+  font-size: 1em;
+  margin-top: 20px;
+  text-align: center;
+`;
+
+const LinkText = styled(Link)`
+  color: #A7D9D4;
+  font-size: 1em;
+  margin-top: 30px;
+  text-align: center;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
 

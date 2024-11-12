@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const hotels = [
@@ -21,71 +21,77 @@ const Home = () => {
         },
     ];
 
-  return (
-    <div style={styles.body}>
-      <header style={styles.header}>
-        <div style={styles.logo}>PillowQuest</div>
-        <nav style={styles.nav}>
-        </nav>
-        <div style={styles.icon}>
-          <img 
-            src="imagenes/Logo.jpg" 
-            alt="Logo de PillowQuest" 
-            style={styles.logoImage}
-          />
+    const navigate = useNavigate(); // Cambia useHistory por useNavigate
+
+    const handleReservationClick = () => {
+        navigate('/Principal'); // Cambia history.push por navigate
+        window.scrollTo(0, 0); // Desplazarse al inicio de la página
+    };
+
+    return (
+        <div style={styles.body}>
+            <header style={styles.header}>
+                <div style={styles.logo}>PillowQuest</div>
+                <nav style={styles.nav}>
+                </nav>
+                <div style={styles.icon}>
+                    <img 
+                        src="imagenes/Logo.jpg" 
+                        alt="Logo de PillowQuest" 
+                        style={styles.logoImage}
+                    />
+                </div>
+            </header>
+
+            <main style={styles.main}>
+                <motion.div
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    style={styles.bienvenido}
+                >
+                    <h1 style={styles.title}>¡¡ Bienvenido !!</h1>
+                    <p style={styles.subText}>Explora nuestros hoteles y encuentra la mejor opción para ti.</p>
+                </motion.div>
+
+                <div style={styles.cards}>
+                    {hotels.map((hotel, index) => (
+                        <motion.div 
+                            key={index} 
+                            style={styles.card}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
+                            <div style={styles.cardImageContainer}>
+                                <img src={hotel.image} alt={hotel.title} style={styles.cardImage} />
+                            </div>
+                            <h2 style={styles.cardTitle}>{hotel.title}</h2>
+                            <p style={styles.cardInfo}>{hotel.info}</p>
+                        </motion.div>
+                    ))}
+                </div>
+
+                <motion.button 
+                    style={styles.button}
+                    onClick={handleReservationClick} // Cambia a un onClick
+                    whileHover={{ 
+                        backgroundColor: '#1a2530',
+                        boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
+                        y: -2
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    Reservar Ahora
+                </motion.button>
+            </main>
+
+            <footer style={styles.footer}>
+                <p>© 2024 PillowQuest - Comparador de Hoteles. Todos los derechos reservados.</p>
+                <p>Prohíbese el expendio de bebidas embriagantes a menores de edad</p>
+                <p>PillowQuest, Kesselstraße 5 - 7, 42521 Düsseldorf, Rusian</p>
+            </footer>
         </div>
-      </header>
-
-      <main style={styles.main}>
-        <motion.div
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          style={styles.bienvenido}
-        >
-          <h1 style={styles.title}>¡¡ Bienvenido !!</h1>
-          <p style={styles.subText}>Explora nuestros hoteles y encuentra la mejor opción para ti.</p>
-        </motion.div>
-
-        <div style={styles.cards}>
-          {hotels.map((hotel, index) => (
-            <motion.div 
-              key={index} 
-              style={styles.card}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div style={styles.cardImageContainer}>
-                <img src={hotel.image} alt={hotel.title} style={styles.cardImage} />
-              </div>
-              <h2 style={styles.cardTitle}>{hotel.title}</h2>
-              <p style={styles.cardInfo}>{hotel.info}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <Link to="./Principal">
-          <motion.button 
-            style={styles.button}
-            whileHover={{ 
-              backgroundColor: '#1a2530',
-              boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
-              y: -2
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Reservar Ahora
-          </motion.button>
-        </Link>
-      </main>
-
-      <footer style={styles.footer}>
-        <p>© 2024 PillowQuest - Comparador de Hoteles. Todos los derechos reservados.</p>
-        <p>Prohíbese el expendio de bebidas embriagantes a menores de edad</p>
-        <p>PillowQuest, Kesselstraße 5 - 7, 42521 Düsseldorf, Rusian</p>
-      </footer>
-    </div>
-  );
+    );
 };
 
 const styles = {
