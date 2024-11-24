@@ -64,11 +64,11 @@ const Ofertas = () => {
               </div>
               <h2 style={styles.cardTitle}>{oferta.title}</h2>
               <p style={styles.cardDescription}>{oferta.description}</p>
-              <Link to="/reserva">
+              <Link to="/Principal">
                 <motion.button
                   style={styles.button}
                   whileHover={{
-                    backgroundColor: '#1a2530',
+                    backgroundColor: '#99BFBB',
                     boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
                     y: -2,
                   }}
@@ -93,8 +93,8 @@ const Ofertas = () => {
 
 const styles = {
   body: {
-    background: 'linear-gradient(to bottom, #284B59, #254559)',
-    fontFamily: "'Lato', sans-serif",
+    background: '#E8E8E8',
+    fontFamily: "'Lato'",
     color: '#F2ECD8',
     padding: 0,
     minHeight: '100vh',
@@ -107,9 +107,9 @@ const styles = {
     backgroundColor: '#2C3E50',
   },
   logo: {
-    fontSize: '1.5em',
-    color: '#A7D9D4',
-    fontFamily: "'Playfair Display', serif",
+    color: '#E8E8E8',
+    fontFamily: "'Lato'",
+    fontSize: '2.5em',
     fontWeight: 'bold',
     textDecoration: 'none',
   },
@@ -131,12 +131,14 @@ const styles = {
   },
   title: {
     fontSize: '2.5em',
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'Lato'",
     marginBottom: '10px',
+    color: '#000',
   },
   subText: {
     fontSize: '1.2em',
-    color: '#F2ECD8',
+    fontFamily: "'Lato'",
+    color: '#000',
   },
   cards: {
     display: 'flex',
@@ -145,7 +147,7 @@ const styles = {
     flexWrap: 'wrap',
   },
   card: {
-    backgroundColor: '#F2ECD8',
+    backgroundColor: '#2C3E50',
     borderRadius: '15px',
     width: '300px',
     padding: '20px',
@@ -165,28 +167,31 @@ const styles = {
     fontSize: '1.6em',
     fontWeight: 'bold',
     margin: '15px 0',
+    fontFamily: "'Lato'",
   },
   cardDescription: {
     fontSize: '1em',
-    color: '#2C3E50',
+    color: '#E8E8E8',
+    fontFamily: "'Lato'",
   },
   button: {
-    backgroundColor: '#2C3E50',
-    color: '#F2ECD8',
+    backgroundColor: '#1A2530',
+    color: '#D4D4D4',
     border: 'none',
     padding: '15px 30px',
     fontSize: '1em',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     borderRadius: '25px',
-    fontFamily: "'Lato', sans-serif",
+    fontFamily: "'Lato'",
   },
   footer: {
+    fontFamily: "'Lato'",
+    fontSize: '1.3em',
+    backgroundColor: '#2C3E50',
+    color: '#E8E8E8',
+    padding: '20px 0',
     textAlign: 'center',
-    padding: '20px',
-    backgroundColor: 'black',
-    color: '#F2ECD8',
-    fontFamily: "'Lato', sans-serif",
   },
 };
 

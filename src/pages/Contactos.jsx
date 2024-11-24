@@ -73,8 +73,8 @@ const Contactos = () => {
 
 const styles = {
   body: {
-    background: 'linear-gradient(to bottom, #284B59, #254559)',
-    fontFamily: "'Lato', sans-serif",
+    background: '#E8E8E8',
+    fontFamily: "'Lato'",
     color: '#F2ECD8',
     padding: 0,
     minHeight: '100vh',
@@ -87,11 +87,11 @@ const styles = {
     backgroundColor: '#2C3E50',
   },
   logo: {
-    fontSize: '1.5em',
-    color: '#A7D9D4',
-    fontFamily: "'Playfair Display', serif",
+    color: '#E8E8E8',
+    fontFamily: "'Lato'",
+    fontSize: '2.5em',
     fontWeight: 'bold',
-    textDecoration: 'none', 
+    textDecoration: 'none',
   },
   icon: {
     color: '#A7D9D4',
@@ -107,18 +107,23 @@ const styles = {
     padding: '50px 20px',
   },
   bienvenido: {
+    fontFamily: "'Lato'",
     marginBottom: '30px',
   },
   title: {
     fontSize: '2.5em',
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'Lato'",
     marginBottom: '10px',
+    color: '#000',
+
   },
   subText: {
+    fontFamily: "'Lato'",
     fontSize: '1.2em',
-    color: '#F2ECD8',
+    color: '#000',
   },
   contactoContainer: {
+    fontFamily: "'Lato'",
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -126,6 +131,7 @@ const styles = {
     marginTop: '40px',
   },
   contactoBox: {
+    fontFamily: "'Lato'",
     backgroundColor: '#2C3E50',
     padding: '20px',
     width: '80%',
@@ -134,11 +140,12 @@ const styles = {
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
   footer: {
-    textAlign: 'center',
-    padding: '20px',
-    backgroundColor: 'black',
+    fontFamily: "'Lato'",
+    fontSize: '1.3em',
+    backgroundColor: '#2C3E50',
     color: '#F2ECD8',
-    fontFamily: "'Lato', sans-serif",
+    padding: '20px 0',
+    textAlign: 'center',
   },
 };
 

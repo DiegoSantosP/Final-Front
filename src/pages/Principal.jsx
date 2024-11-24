@@ -1,162 +1,224 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 import { motion } from 'framer-motion';
-import HotelSearch from '../components/HotelSearch';
 
-const Ppal = () => {
-  const [showFilters, setShowFilters] = React.useState(false);
-  const [priceRange, setPriceRange] = React.useState(1500); 
-  const [starRating, setStarRating] = React.useState('1'); 
-  const [selectedHotel, setSelectedHotel] = React.useState(null);
-  const [destination, setDestination] = React.useState('');
-  const [checkInDate, setCheckInDate] = React.useState('');
-  const [checkOutDate, setCheckOutDate] = React.useState('');
+const Principal = () => {
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
+  const [priceRange, setPriceRange] = useState(1500);
+  const [starRating, setStarRating] = useState('1');
+  const [selectedHotel, setSelectedHotel] = useState(null);
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredHotels, setFilteredHotels] = useState([]);
 
-  const handleHotelClick = (hotel) => {
-    setSelectedHotel(hotel);
-  };
+  useEffect(() => {
+    // Cargar datos de hoteles
+    const hotelData = [
+      { name: 'Sofitel Legend Santa Clara', location: 'Cartagena', stars: 5, price: 1000, image: 'imagenes/Hotel1.jpg' },
+      { name: 'Grand Hyatt', location: 'Bogotá', stars: 4, price: 100, image: 'imagenes/Hotel2.jpg' },
+      { name: 'Four Seasons Hotel Casa Medina', location: 'Bogotá', stars: 5, price: 1500, image: 'imagenes/Hotel3.jpg' },
+      { name: 'Conrad', location: 'Cartagena', stars: 4.5, price: 480, image: 'imagenes/Hotel4.jpg' },
+      { name: 'Lofuers', location: 'Blanc', stars: 3.5, price: 700, image: 'imagenes/Hotel5.jpg' },
+      { name: 'Migdar', location: 'DESDE', stars: 4, price: 400, image: 'imagenes/Hotel6.jpg' },
+    ];
+    setFilteredHotels(hotelData);
 
-  const handleFilterChange = (e) => {
-    if (e.target.name === 'priceRange') {
-      setPriceRange(e.target.value);
-    } else if (e.target.name === 'starRating') {
-      setStarRating(e.target.value);
+    // Recuperar el nombre del usuario desde localStorage (si está logueado)
+    const loggedUser = localStorage.getItem('user');
+    if (loggedUser) {
+      setUser(loggedUser); // Establecer el nombre del usuario logueado
     }
-  };
+  }, [setUser]); // Agregar setUser a las dependencias
 
-  const handleSearch = () => {
-    const filteredHotels = hotels.filter(hotel => 
-      hotel.location.toLowerCase().includes(destination.toLowerCase()) || 
-      hotel.name.toLowerCase().includes(destination.toLowerCase())
-    );
-    <HotelSearch /> 
-  };
-  
-
-  const hotels = [
-    { name: 'Sofitel Legend Santa Clara', location: 'Cartagena', stars: 5, price: 1000, image: 'imagenes/Hotel1.jpg' },
-    { name: 'Grand Hyatt', location: 'Bogotá', stars: 4, price: 100, image: 'imagenes/Hotel2.jpg' },
-    { name: 'Four Seasons Hotel Casa Medina', location: 'Bogotá', stars: 5, price: 1500, image: 'imagenes/Hotel3.jpg'},
-    { name: 'Conrad', location: 'Cartagena', stars: 4.5, price: 480, image: 'imagenes/Hotel4.jpg'},
-    { name: 'Lofuers', location: 'Blanc', stars: 3.5, price: 700, image: 'imagenes/Hotel5.jpg'},
-    { name: 'Migdar', location: 'DESDE', stars: 4, price: 400, image: 'imagenes/Hotel6.jpg'},
-  ];
-
-  const filteredHotels = hotels.filter(hotel => {
+  // Filtrado en base a los valores seleccionados
+  const finalFilteredHotels = filteredHotels.filter(hotel => {
     return (
-      hotel.price <= priceRange && 
-      (starRating ? hotel.stars >= parseFloat(starRating) : true)
+      hotel.price <= priceRange &&
+      (starRating ? hotel.stars >= parseFloat(starRating) : true) &&
+      (hotel.name.toLowerCase().includes(searchQuery.toLowerCase()) || hotel.location.toLowerCase().includes(searchQuery.toLowerCase()))
     );
   });
+
+  const handleReserve = () => {
+    if (!checkInDate || !checkOutDate) {
+      alert("Por favor, selecciona las fechas de ingreso y salida.");
+      return;
+    }
+    if (!selectedHotel) {
+      alert("Por favor, selecciona un hotel.");
+      return;
+    }
+
+    navigate('/ConfReserva', {
+      state: { hotel: selectedHotel, checkInDate, checkOutDate }
+    });
+  };
+
+  const handleLogin = () => {
+    navigate('/Login');
+  };
+
+  const handleRegister = () => {
+    navigate('/Register');
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('user'); // Eliminar el usuario del localStorage
+    navigate('/Principal'); // Redirigir a la página principal
+  };
 
   return (
     <div style={styles.body}>
       <header style={styles.header}>
         <div style={styles.logo}>
-          <Link to="/" style={styles.logoLink}>PillowQuest</Link>
+          <a href="/" style={styles.logoLink}>PillowQuest</a>
         </div>
         <nav style={styles.nav}>
-          <Link to="/Principal" style={styles.navLink}>Inicio</Link>
-          <Link to="/Ofertas" style={styles.navLink}>Ofertas</Link>
-          <Link to="/Contactos" style={styles.navLink}>Contacto</Link>
-          <Link to="/AcercaDe" style={styles.navLink}>Acerca de Nosotros</Link>
-          <Link to="/Test" style={styles.navLink}>Test</Link>
-          <Link to="/Profile" style={styles.navLink}>Profile</Link>
+          <a href="/Principal" style={styles.navLink}>Inicio</a>
+          <a href="/Ofertas" style={styles.navLink}>Ofertas</a>
+          <a href="/Contactos" style={styles.navLink}>Contacto</a>
+          <a href="/AcercaDe" style={styles.navLink}>Acerca de Nosotros</a>
         </nav>
         <div style={styles.authButtons}>
-          <Link to="/Register" style={styles.authButton}>Register</Link>
-          <Link to="/Login" style={styles.authButton}>Login</Link>
+          {user ? (
+            <div style={styles.userSection}>
+              {/* Icono de usuario con imagen y tamaño 50x50 */}
+              <span onClick={() => navigate('/Perfil')}>
+                <img src={process.env.PUBLIC_URL + '/imagenes/Perfil.png'} alt="Icono de usuario" style={{ width: 50, height: 50, borderRadius: '50%' }} />
+              </span>
+
+              <button
+                onClick={handleLogout}
+                style={{ ...styles.button, ...styles.logoutButton }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = styles.logoutButtonHover.backgroundColor}
+                onMouseLeave={(e) => e.target.style.backgroundColor = styles.logoutButton.backgroundColor}
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          ) : (
+            <div style={styles.authButtonsContainer}>
+              <button
+                onClick={handleLogin}
+                style={{ ...styles.button, ...styles.loginButton }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = styles.loginButtonHover.backgroundColor}
+                onMouseLeave={(e) => e.target.style.backgroundColor = styles.loginButton.backgroundColor}
+              >
+                Login
+              </button>
+              <button
+                onClick={handleRegister}
+                style={{ ...styles.button, ...styles.registerButton }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = styles.registerButtonHover.backgroundColor}
+                onMouseLeave={(e) => e.target.style.backgroundColor = styles.registerButton.backgroundColor}
+              >
+                Register
+              </button>
+            </div>
+          )}
         </div>
       </header>
-
       <main style={styles.main}>
-        <section style={styles.searchSection}>
+        <motion.section
+          style={styles.searchSection}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <h1 style={styles.title}>Compara precios de hoteles alrededor del mundo</h1>
           <div style={styles.searchBar}>
-            <input 
-              type="text" 
-              placeholder="Destino" 
-              style={styles.input} 
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)} 
-            />
-            <input 
-              type="date" 
-              placeholder="Check-in" 
-              style={styles.input} 
-              value={checkInDate}
-              onChange={(e) => setCheckInDate(e.target.value)} 
-            />
-            <input 
-              type="date" 
-              placeholder="Check-out" 
-              style={styles.input} 
-              value={checkOutDate}
-              onChange={(e) => setCheckOutDate(e.target.value)} 
-            />
-            <button style={styles.searchButton} onClick={handleSearch}>Buscar</button>
-          </div>
-        </section>
+            <div style={styles.inputContainer}>
+              <p style={styles.label}>Búsqueda</p>
+              <input
+                type="text"
+                placeholder="Buscar hotel..."
+                style={styles.input}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
 
-        <div style={styles.filterButtonContainer}>
-          <button onClick={() => setShowFilters(!showFilters)} style={styles.filterButton}>
-            {showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'}
-          </button>
-        </div>
-        {showFilters && (
-          <motion.div
-            style={styles.filterPanel}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3 style={styles.filterTitle}>Filtros</h3>
-            <div style={styles.filterOption}>
-              <label>Rango de Precio: {priceRange} USD</label>
+            <div style={styles.inputContainer}>
+              <p style={styles.label}>Check-in</p>
               <input
-                type="range"
-                min="50"
-                max="1500"
-                value={priceRange}
-                name="priceRange"
-                onChange={handleFilterChange}
-                style={styles.filterInput}
+                type="date"
+                style={styles.input}
+                value={checkInDate}
+                onChange={(e) => setCheckInDate(e.target.value)}
               />
             </div>
-            <div style={styles.filterOption}>
-              <label>Clasificación de Estrellas: {starRating} Estrellas</label>
+
+            <div style={styles.inputContainer}>
+              <p style={styles.label}>Check-out</p>
               <input
-                type="range"
-                min="1"
-                max="5"
-                value={starRating}
-                name="starRating"
-                onChange={handleFilterChange}
-                style={styles.filterInput}
+                type="date"
+                style={styles.input}
+                value={checkOutDate}
+                onChange={(e) => setCheckOutDate(e.target.value)}
               />
             </div>
-          </motion.div>
-        )}
-  
-        <section style={styles.results}>
-          <h2 style={styles.subtitle}>Resultados de búsqueda</h2>
-          <div style={styles.hotelList}>
-            {filteredHotels.map((hotel, index) => (
-              <motion.div
-                key={index}
-                style={styles.hotel}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                onClick={() => handleHotelClick(hotel)}
-              >
-                <img src={hotel.image} alt={hotel.name} style={styles.hotelImage} />
-                <h3 style={styles.hotelName}>{hotel.name} ({hotel.location})</h3>
-                <p style={styles.hotelInfo}>Reputación: {hotel.stars} Estrellas</p>
-                <p style={styles.hotelInfo}>{hotel.price} USD por noche</p>
-              </motion.div>
-            ))}
           </div>
-        </section>
+        </motion.section>
+
+        <div style={styles.container}>
+          <aside style={styles.filterPanel}>
+            <div style={styles.filterContainer}>
+              <div style={styles.filterOption}>
+                <label>Rango de Precio: {priceRange} USD</label>
+                <input
+                  type="number"
+                  min="50"
+                  max="1500"
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  style={styles.filterInput}
+                />
+              </div>
+              <div style={{ ...styles.filterOption, marginTop: '20px' }}>
+                <label>Clasificación de Estrellas:</label>
+                <div style={styles.starRating}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      onClick={() => setStarRating(star.toString())}
+                      style={{
+                        cursor: 'pointer',
+                        color: starRating >= star ? '#FFD700' : '#ccc',
+                        fontSize: '2em',
+                      }}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <section style={styles.results}>
+            <h2 style={styles.subtitle}>Resultados de búsqueda</h2>
+            <div style={styles.hotelList}>
+              {finalFilteredHotels.map((hotel, index) => (
+                <motion.div
+                  key={index}
+                  style={styles.hotel}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  onClick={() => setSelectedHotel(hotel)}
+                >
+                  <img src={hotel.image} alt={hotel.name} style={styles.hotelImage} />
+                  <h3 style={styles.hotelName}>{hotel.name} ({hotel.location})</h3>
+                  <p style={styles.hotelInfo}>Reputación: {hotel.stars} Estrellas</p>
+                  <p style={styles.hotelInfo}>{hotel.price} USD por noche</p>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+        </div>
 
         {selectedHotel && (
           <div style={styles.modal}>
@@ -167,10 +229,10 @@ const Ppal = () => {
               <p>{selectedHotel.stars} Estrellas</p>
               <p>{selectedHotel.price} USD por noche</p>
               <p>Fechas: {checkInDate} - {checkOutDate}</p>
-              <button onClick={() => {
-                alert(`Reservando ${selectedHotel.name} del ${checkInDate} al ${checkOutDate}`);
-              }} style={styles.reserveButton}>Reservar ahora</button>
-              <button onClick={() => setSelectedHotel(null)} style={styles.closeButton}>Cerrar</button>
+              <div style={styles.modalButtons}>
+                <button onClick={handleReserve} style={styles.reserveButton}>Reservar ahora</button>
+                <button onClick={() => setSelectedHotel(null)} style={styles.closeButton}>Cerrar</button>
+              </div>
             </div>
           </div>
         )}
@@ -178,118 +240,172 @@ const Ppal = () => {
 
       <footer style={styles.footer}>
         <p>© 2024 PillowQuest - Comparador de Hoteles. Todos los derechos reservados.</p>
-        <p>Prohíbese el expendio de bebidas embriagantes a menores de edad</p>
-        <p>PillowQuest, Kesselstraße 5 - 7, 42521 Düsseldorf, Rusian</p>
+        <p>Prohíbese el expendio de bebidas alcohólicas</p>
       </footer>
     </div>
   );
 };
-
 const styles = {
   body: {
-    background: 'linear-gradient(to bottom, #284B59, #254559)',
-    fontFamily: "'Lato', sans-serif",
+    fontFamily: "'Lato'",
+    backgroundColor: '#E8E8E8',
     color: '#F2ECD8',
+    margin: 0,
     padding: 0,
     minHeight: '100vh',
   },
   header: {
+    backgroundColor: '#2C3E50',
+    color: '#F2ECD8',
+    padding: '20px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '20px',
-    backgroundColor: '#2C3E50',
   },
   logo: {
-    fontSize: '1.5em',
+    fontSize: '2.5em',
     fontWeight: 'bold',
   },
   logoLink: {
-    color: '#A7D9D4',
+    color: '#F2ECD8',
     textDecoration: 'none',
-    fontFamily: "'Playfair Display', serif",
   },
   nav: {
     display: 'flex',
-    gap: '20px',
+    gap: '30px',
   },
   navLink: {
+    fontSize: '1.5em',
     color: '#F2ECD8',
     textDecoration: 'none',
     fontWeight: 'bold',
   },
   authButtons: {
     display: 'flex',
+    gap: '30px',
+    marginRight: '20px',
+  },
+  authButtonsContainer: {
+    display: 'flex',
     gap: '10px',
   },
-  authButton: {
-    backgroundColor: '#99BFBB',
-    color: '#2C3E50',
-    border: 'none',
-    padding: '10px 15px',
-    borderRadius: '5px',
-    textDecoration: 'none',
-    fontWeight: 'bold',
-    transition: 'background-color 0.3s',
-  },
   main: {
-    padding: '50px 20px',
-    maxWidth: '1200px',
-    margin: '0 auto',
+    padding: '40px 20px',
   },
-  searchSection: {
-    textAlign: 'center',
-    marginBottom: '50px',
+  // Estilos de los botones
+  button: {
+    padding: '10px 20px',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    border: 'none',
+    borderRadius: '30px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s, transform 0.3s',
+    backgroundColor: '#0066cc', // Color base
+    color: '#ffffff',
+  },
+  buttonHover: {
+    backgroundColor: '#005bb5', // Color al pasar el mouse
+    transform: 'scale(1.05)', // Efecto de agrandamiento
+  },
+  loginButton: {
+    backgroundColor: '#28a745', // Verde para login
+  },
+  loginButtonHover: {
+    backgroundColor: '#218838', // Verde más oscuro
+  },
+  registerButton: {
+    backgroundColor: '#ffc107', // Amarillo para register
+  },
+  registerButtonHover: {
+    backgroundColor: '#e0a800', // Amarillo más oscuro
+  },
+  logoutButton: {
+    backgroundColor: '#dc3545', // Rojo para logout
+  },
+  logoutButtonHover: {
+    backgroundColor: '#c82333', // Rojo más oscuro
+  },
+  // Estilo para el círculo de usuario
+  userInitial: {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    color: 'white',
+    textTransform: 'uppercase',
+  },
+  userSection: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px', // Espaciado de 10px entre el icono de usuario y el botón
+  },
+  userIcon: {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%', // Asegura que el icono sea redondeado
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
   },
   title: {
+    textAlign: 'center',
     fontSize: '2.5em',
+    color: '#000',
+  },
+  subtitle: {
+    textAlign: 'center',
+    fontSize: '1.8em',
     marginBottom: '20px',
-    fontFamily: "'Playfair Display', serif",
+  },
+  searchSection: {
+    marginBottom: '20px',
+  },
+  input: {
+    padding: '10px',
+    fontSize: '1em',
+    margin: '5px',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   searchBar: {
     display: 'flex',
     justifyContent: 'center',
     gap: '10px',
-    flexWrap: 'wrap',
+    marginBottom: '20px',
   },
-  input: {
-    padding: '10px',
-    fontSize: '1em',
-    borderRadius: '5px',
-    border: 'none',
-  },
-  searchButton: {
-    backgroundColor: '#99BFBB',
+  label: {
+    fontSize: '1.2em',
+    marginBottom: '8px',
     color: '#2C3E50',
-    border: 'none',
-    padding: '10px 20px',
-    borderRadius: '5px',
-    fontSize: '1em',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
+    fontWeight: 'bold',
   },
-  filterButtonContainer: {
+  container: {
     display: 'flex',
-    justifyContent: 'center', 
-    marginTop: '20px',
-  },
-  filterButton: {
-    padding: '10px 20px',
-    backgroundColor: '#99BFBB',
-    color: '#2C3E50',
-    borderRadius: '5px',
-    border: 'none',
-    cursor: 'pointer',
   },
   filterPanel: {
-    marginTop: '30px',
+    width: '30%',
+    maxHeight: '180px',
+    overflowY: 'auto',
     padding: '20px',
     backgroundColor: '#34495E',
     borderRadius: '8px',
+    marginRight: '20px',
   },
-  filterTitle: {
-    fontSize: '1.2em',
-    marginBottom: '20px',
+  filterContainer: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   filterOption: {
     marginBottom: '15px',
@@ -301,25 +417,26 @@ const styles = {
     fontSize: '1em',
     borderRadius: '5px',
   },
-  results: {
-    marginTop: '50px',
+  starRating: {
+    display: 'flex',
+    gap: '5px',
+    marginTop: '10px',
   },
-  subtitle: {
-    fontSize: '2em',
-    marginBottom: '20px',
+  results: {
+    flexGrow: 1,
   },
   hotelList: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
     gap: '20px',
   },
   hotel: {
     backgroundColor: '#2C3E50',
     padding: '20px',
-    borderRadius: '8px',
-    textAlign: 'center',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     cursor: 'pointer',
-    transition: 'transform 0.3s',
+    transition: 'transform 0.3s ease-in-out',
   },
   hotelImage: {
     width: '100%',
@@ -333,14 +450,8 @@ const styles = {
   },
   hotelInfo: {
     marginTop: '10px',
-    fontSize: '1em',
-  },
-  hotelLink: {
-    marginTop: '15px',
-    display: 'block',
-    color: '#A7D9D4',
-    fontWeight: 'bold',
-    textDecoration: 'none',
+    fontSize: '1.2em',
+    color: '#E8E8E8',
   },
   modal: {
     position: 'fixed',
@@ -360,35 +471,43 @@ const styles = {
     borderRadius: '8px',
     textAlign: 'center',
     width: '80%',
-    maxWidth: '500px',
+    fontSize: '1.2em',
+    maxWidth: '400px',
+  },
+  modalButtons: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '20px',
   },
   reserveButton: {
     backgroundColor: '#99BFBB',
     color: '#2C3E50',
     border: 'none',
-    padding: '10px 20px',
+    padding: '10px 10px',
+    fontFamily: "'Lato'",
     fontSize: '1.2em',
-    marginTop: '20px',
+    marginTop: '25px',
     marginRight: '10px',
     borderRadius: '5px',
   },
   closeButton: {
-    backgroundColor: '#A7D9D4',
+    backgroundColor: '#99BFBB',
     color: '#2C3E50',
     border: 'none',
-    padding: '10px 20px',
+    padding: '10px 10px',
+    fontFamily: "'Lato'",
     fontSize: '1.2em',
     marginTop: '20px',
     marginBottom: '10px',
     borderRadius: '5px',
   },
-  
   footer: {
-    backgroundColor: 'black',
+    fontSize: '1.3em',
+    backgroundColor: '#2C3E50',
     color: '#F2ECD8',
     padding: '20px 0',
     textAlign: 'center',
   },
 };
 
-export default Ppal;
+export default Principal;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const AcercaDe = () => {
   return (
@@ -8,55 +8,37 @@ const AcercaDe = () => {
       <header style={styles.header}>
         <Link to="/Principal" style={styles.logo}>PillowQuest</Link>
         <div style={styles.icon}>
-          <img
-            src="imagenes/Logo.jpg"
-            alt="Logo de PillowQuest"
-            style={styles.logoImage}
-          />
+          <img src="imagenes/Logo.jpg" alt="Logo de PillowQuest" style={styles.logoImage} />
         </div>
       </header>
 
       <main style={styles.main}>
-        <motion.div initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} style={styles.bienvenido}>
-          <h1 style={styles.title}>Acerca de PillowQuest</h1>
+        <AnimatedSection title="Acerca de PillowQuest">
           <p style={styles.subText}>
-            PillowQuest es una empresa dedicada a la creación de soluciones innovadoras
-            en la industria del turismo. Nuestro objetivo es proporcionar a los viajeros
-            una experiencia personalizada y única a través de nuestra plataforma de comparación
-            de hoteles, asegurando la mejor calidad y las mejores ofertas en alojamiento.
+            PillowQuest es una empresa pionera en la creación de soluciones innovadoras en la industria del turismo. Nuestro objetivo es proporcionar a los viajeros una experiencia excepcional y única a través de nuestra avanzada plataforma de comparación de hoteles, garantizando la mejor calidad y las ofertas más competitivas en alojamiento.
           </p>
+        </AnimatedSection>
 
-        <section style={styles.section}>
-          <h2 style={styles.subtitle}>Nuestra Misión</h2>
+        <AnimatedSection title="Nuestra Misión">
           <p style={styles.text}>
-            En PillowQuest, nos comprometemos a ofrecer a los viajeros las mejores opciones
-            de alojamiento, ayudándolos a encontrar lugares cómodos y accesibles que se adapten
-            a sus necesidades. Creemos en la innovación constante para mejorar la experiencia de
-            cada usuario en su proceso de búsqueda y reserva de hospedaje.
+            En PillowQuest, nos comprometemos a ofrecer a los viajeros las mejores opciones de alojamiento, facilitando la búsqueda de lugares cómodos y accesibles que se adapten a sus necesidades. Creemos firmemente en la innovación constante para enriquecer la experiencia de cada usuario en su proceso de búsqueda y reserva de hospedaje.
           </p>
-        </section>
-        
+        </AnimatedSection>
 
-        <section style={styles.section}>
-          <h2 style={styles.subtitle}>Nuestra Visión</h2>
+        <AnimatedSection title="Nuestra Visión">
           <p style={styles.text}>
-            Ser una empresa líder en el mercado de la tecnología aplicada al turismo,
-            transformando la manera en que los viajeros eligen sus destinos y se hospedan.
-            Aspiramos a ser reconocidos por nuestra confiabilidad, innovación y compromiso con
-            la excelencia.
+            Aspiramos a ser una empresa líder en el mercado de la tecnología aplicada al turismo, revolucionando la forma en que los viajeros seleccionan sus destinos y se hospedan. Nos proponemos ser reconocidos por nuestra confiabilidad, innovación y un firme compromiso con la excelencia.
           </p>
-        </section>
-        </motion.div>
+        </AnimatedSection>
 
-        <section style={styles.section}>
-          <h2 style={styles.subtitle}>Nuestros Valores</h2>
+        <AnimatedSection title="Nuestros Valores">
           <ul style={styles.valuesList}>
             <li>Compromiso con la excelencia.</li>
             <li>Innovación constante.</li>
             <li>Atención personalizada.</li>
             <li>Transparencia y confianza.</li>
           </ul>
-        </section>
+        </AnimatedSection>
       </main>
 
       <footer style={styles.footer}>
@@ -68,14 +50,30 @@ const AcercaDe = () => {
   );
 };
 
+const AnimatedSection = ({ title, children }) => {
+  return (
+    <section style={styles.section}>
+      <h2 style={styles.subtitle}>{title}</h2>
+      <motion.div
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        style={styles.contentBox}
+      >
+        {children}
+      </motion.div>
+    </section>
+  );
+};
+
 const styles = {
   body: {
-    background: 'linear-gradient(to bottom, #284B59, #254559)',
-    fontFamily: "'Lato', sans-serif",
+    background: '#E8E8E8',
+    fontFamily: "'Lato'",
     color: '#F2ECD8',
     padding: 0,
     margin: 0,
-    minHeight: '100vh', 
+    minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -86,12 +84,11 @@ const styles = {
     alignItems: 'center',
     padding: '20px',
     backgroundColor: '#2C3E50',
-    margin: 0, 
   },
   logo: {
-    fontSize: '1.5em',
-    color: '#A7D9D4',
+    color: '#E8E8E8',
     fontFamily: "'Playfair Display', serif",
+    fontSize: '2.5em',
     fontWeight: 'bold',
     textDecoration: 'none',
   },
@@ -107,35 +104,33 @@ const styles = {
   main: {
     textAlign: 'center',
     padding: '50px 20px',
-    margin: 0, 
-  },
-  bienvenido: {
-    marginBottom: '30px',
-  },
-  title: {
-    fontSize: '2.5em',
-    fontFamily: "'Playfair Display', serif",
-    marginBottom: '10px',
+    margin: 0,
   },
   subText: {
     fontSize: '1.2em',
-    color: '#F2ECD8',
-    marginBottom: '0', 
+    color: '# E8E8E8',
+    marginBottom: '0',
   },
   section: {
     margin: '40px 0',
-    padding: 0, 
+    padding: 0,
   },
   subtitle: {
     fontSize: '2em',
-    color: '#A7D9D4',
-    fontFamily: "'Playfair Display', serif",
+    color: '#2C3E50',
+    textAlign: 'center',
     marginBottom: '15px',
+  },
+  contentBox: { 
+    backgroundColor: '#2C3E50',
+    padding: '20px',
+    borderRadius: '8px',
+    color: '#E8E8E8',
   },
   text: {
     fontSize: '1.2em',
-    color: '#F2ECD8',
-    textAlign: 'left',
+    color: '#E8E8E8',
+    textAlign: 'justify',
     lineHeight: '1.6',
     margin: 0,
   },
@@ -143,16 +138,16 @@ const styles = {
     listStyleType: 'none',
     paddingLeft: '0',
     fontSize: '1.2em',
-    color: '#F2ECD8',
-    margin: 0, 
+    color: '#E8E8E8',
+    margin: 0,
+    textAlign: 'center',
   },
   footer: {
-    textAlign: 'center',
-    padding: '20px',
-    backgroundColor: 'black',
+    fontSize: '1.3em',
+    backgroundColor: '#2C3E50',
     color: '#F2ECD8',
-    fontFamily: "'Lato', sans-serif",
-    margin: 0, 
+    padding: '20px 0',
+    textAlign: 'center',
   },
 };
 
