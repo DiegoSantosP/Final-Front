@@ -6,14 +6,11 @@ const ConfReserva = () => {
   const { hotel, checkInDate, checkOutDate } = state || {};
   const navigate = useNavigate();
 
-  // Si no hay datos de la reserva, mostramos un mensaje de error
   if (!hotel || !checkInDate || !checkOutDate) {
     return <div>Información no disponible.</div>;
   }
 
-  // Guardar la reserva en localStorage
   const saveReservation = () => {
-    // Crear el objeto de reserva
     const reservation = {
       hotelName: hotel.name,
       hotelImage: hotel.image,
@@ -24,16 +21,9 @@ const ConfReserva = () => {
       checkOutDate
     };
 
-    // Obtener las reservas existentes desde localStorage
     const savedReservations = JSON.parse(localStorage.getItem('userBookings')) || [];
-
-    // Agregar la nueva reserva
     savedReservations.push(reservation);
-
-    // Guardar las reservas actualizadas en localStorage
     localStorage.setItem('userBookings', JSON.stringify(savedReservations));
-
-    // Redirigir a la página de perfil
     navigate('/Perfil');
   };
 
@@ -64,12 +54,13 @@ const ConfReserva = () => {
       </main>
 
       <footer style={styles.footer}>
-        <p>&copy; 2024 PillowQuest - Todos los derechos reservados.</p>
+        <p>© 2024 PillowQuest - Comparador de Hoteles. Todos los derechos reservados.</p>
+        <p>Prohíbese el expendio de bebidas embriagantes a menores de edad</p>
+        <p>PillowQuest, Kesselstraße 5 - 7, 42521 Düsseldorf, Rusian</p>
       </footer>
     </div>
   );
 };
-
 const styles = {
   body: {
     fontFamily: "'Lato'",
@@ -108,16 +99,19 @@ const styles = {
     fontSize: '1.8em',
     marginBottom: '20px',
     color: '#000',
-  },
-  container: {
+  },  container: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
+    width: '100%', // Asegúrate de que el contenedor ocupe el ancho completo
   },
   results: {
     width: '80%',
     maxWidth: '800px',
+    display: 'flex', // Agrega display flex
+    flexDirection: 'column', // Asegúrate de que los elementos se apilen verticalmente
+    alignItems: 'center', // Centra los elementos dentro de results
   },
   hotel: {
     backgroundColor: '#2C3E50',
@@ -133,23 +127,25 @@ const styles = {
     borderRadius: '8px',
   },
   hotelName: {
-    fontSize: '1.5em',
+    fontSize: '2.5em',
     marginTop: '15px',
     fontWeight: 'bold',
   },
   hotelInfo: {
     marginTop: '10px',
-    fontSize: '1.2em',
+    fontSize: '1.5em',
   },
   reserveButton: {
     backgroundColor: '#99BFBB',
     color: '#2C3E50',
     border: 'none',
     padding: '10px 20px',
-    fontSize: '1.2em',
+    fontFamily: "'Lato'",
+    fontSize: '1.7em',
     marginTop: '20px',
     borderRadius: '5px',
     cursor: 'pointer',
+    display: 'block', // Asegúrate de que el botón sea un bloque para el margen automático
   },
   footer: {
     fontSize: '1.3em',

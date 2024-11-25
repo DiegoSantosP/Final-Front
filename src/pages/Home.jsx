@@ -19,12 +19,12 @@ const Home = () => {
     },
     {
       title: 'The Royal Bay Resort',
-      info: 'Lujo sin límites en el paraíso tropical.',
+      info: 'Lujo sin límites en el paraíso tropical moderno.',
       image: '/imagenes/Reference3.jpg',
     },
     {
       title: 'Palacio Sereno',
-      info: 'Donde la historia se encuentra con el confort moderno.',
+      info: 'Donde la historia se encuentra con el confort.',
       image: '/imagenes/Reference4.jpg',
     },
     {
@@ -294,34 +294,62 @@ const styles = {
   },
   cardContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    flexWrap: 'wrap',
     padding: '0 20px',
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
+    gap: '15px', 
+    overflowX: 'hidden', 
   },
+  
   card: {
     backgroundColor: '#2C3E50',
     borderRadius: '10px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     padding: '15px',
-    maxWidth: '220px',
+    flex: '1 1 calc(33.333% - 30px)', 
+    maxWidth: '200px', 
+    minWidth: '300px', 
     margin: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    textAlign: 'center',
   },
+  
+  carouselImage: {
+    width: '100%',
+    height: '150px', 
+    objectFit: 'cover', 
+    borderRadius: '10px 10px 0 0',
+  },
+  
   cardTitle: {
-    fontSize: '1.3em',
-    margin: '10px 0',
-    fontFamily: "'Lato'",
+    fontSize: '1.2rem',
+    color: '#ECF0F1',
+    margin: '10px 0 5px',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
   },
+  
   cardInfo: {
-    fontSize: '0.9em',
+    fontSize: '1.2rem',
+    color: '#E8E8E8',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    display: '-webkit-box',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 3,
   },
+  
   button: {
     backgroundColor: '#2C3E50',
     color: '#F2ECD8',
     border: 'none',
     marginTop: '70px',
     padding: '15px 30px',
-    fontSize: '1em',
+    fontSize: '1.5em',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     borderRadius: '25px',
@@ -333,6 +361,7 @@ const styles = {
     backgroundColor: '#2C3E50',
     color: '#F2ECD8',
     fontFamily: "'Lato'",
+    fontSize: '1.5em',
   },
 };
 
