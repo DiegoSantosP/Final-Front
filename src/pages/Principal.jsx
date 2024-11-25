@@ -240,7 +240,8 @@ const Principal = () => {
 
       <footer style={styles.footer}>
         <p>© 2024 PillowQuest - Comparador de Hoteles. Todos los derechos reservados.</p>
-        <p>Prohíbese el expendio de bebidas alcohólicas</p>
+        <p>Prohíbese el expendio de bebidas embriagantes a menores de edad</p>
+        <p>PillowQuest, Kesselstraße 5 - 7, 42521 Düsseldorf, Rusian</p>
       </footer>
     </div>
   );
@@ -292,7 +293,6 @@ const styles = {
   main: {
     padding: '40px 20px',
   },
-  // Estilos de los botones
   button: {
     padding: '10px 20px',
     fontSize: '16px',
@@ -302,32 +302,37 @@ const styles = {
     borderRadius: '30px',
     cursor: 'pointer',
     transition: 'background-color 0.3s, transform 0.3s',
-    backgroundColor: '#0066cc', // Color base
+    backgroundColor: '#0066cc',
     color: '#ffffff',
   },
   buttonHover: {
-    backgroundColor: '#005bb5', // Color al pasar el mouse
-    transform: 'scale(1.05)', // Efecto de agrandamiento
+    backgroundColor: '#005bb5', 
+    transform: 'scale(1.05)',
   },
   loginButton: {
-    backgroundColor: '#28a745', // Verde para login
+    fontFamily: "'Lato'",
+    backgroundColor: '#28a745', 
   },
   loginButtonHover: {
-    backgroundColor: '#218838', // Verde más oscuro
+    fontFamily: "'Lato'",
+    backgroundColor: '#218838', 
   },
   registerButton: {
-    backgroundColor: '#ffc107', // Amarillo para register
+    fontFamily: "'Lato'",
+    backgroundColor: '#ffc107', 
   },
   registerButtonHover: {
-    backgroundColor: '#e0a800', // Amarillo más oscuro
+    fontFamily: "'Lato'",
+    backgroundColor: '#e0a800', 
   },
   logoutButton: {
-    backgroundColor: '#dc3545', // Rojo para logout
+    fontFamily: "'Lato'",
+    backgroundColor: '#dc3545', 
   },
   logoutButtonHover: {
-    backgroundColor: '#c82333', // Rojo más oscuro
+    backgroundColor: '#c82333', 
+    fontFamily: "'Lato'",
   },
-  // Estilo para el círculo de usuario
   userInitial: {
     width: '50px',
     height: '50px',
@@ -343,12 +348,12 @@ const styles = {
   userSection: {
     display: 'flex',
     alignItems: 'center',
-    gap: '10px', // Espaciado de 10px entre el icono de usuario y el botón
+    gap: '10px', 
   },
   userIcon: {
     width: '50px',
     height: '50px',
-    borderRadius: '50%', // Asegura que el icono sea redondeado
+    borderRadius: '50%', 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -476,30 +481,34 @@ const styles = {
   },
   modalButtons: {
     display: 'flex',
-    justifyContent: 'space-between',
-    gap: '20px',
+    justifyContent: 'center', 
+    gap: '50px', 
+    marginTop: '10px', 
   },
   reserveButton: {
     backgroundColor: '#99BFBB',
     color: '#2C3E50',
     border: 'none',
-    padding: '10px 10px',
+    padding: '10px 5px',
     fontFamily: "'Lato'",
     fontSize: '1.2em',
-    marginTop: '25px',
-    marginRight: '10px',
     borderRadius: '5px',
+    flex: 1, 
+    maxWidth: '100px', 
+    textAlign: 'center',
   },
+  
   closeButton: {
     backgroundColor: '#99BFBB',
     color: '#2C3E50',
     border: 'none',
-    padding: '10px 10px',
+    padding: '10px 15px',
     fontFamily: "'Lato'",
-    fontSize: '1.2em',
-    marginTop: '20px',
-    marginBottom: '10px',
+    fontSize: '1.5em',
     borderRadius: '5px',
+    flex: 1,
+    maxWidth: '100px',
+    textAlign: 'center',
   },
   footer: {
     fontSize: '1.3em',

@@ -7,7 +7,7 @@ import Ofertas from "./pages/Ofertas";
 import Contactos from "./pages/Contactos"; 
 import AcercaDe from "./pages/AcercaDe"; 
 import Perfil from "./pages/Perfil";
-import Register from "./pages/Register";
+import Register from "./pages/Register.jsx";
 import Login from "./pages/Login";
 import ConfReserva from "./pages/ConfReserva";
 
