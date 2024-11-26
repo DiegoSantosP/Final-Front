@@ -26,17 +26,6 @@ const UserProfile = () => {
         status: "Pending",
       },
     ],
-    paymentMethods: [
-      {
-        type: "Credit Card",
-        last4: "1234",
-        expiration: "12/25",
-      },
-      {
-        type: "Paypal",
-        email: "paypaluser@example.com",
-      },
-    ],
   };
 
   return (

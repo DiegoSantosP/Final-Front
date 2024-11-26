@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useUser  } from '../context/UserContext'; // Asegúrate de que la ruta sea correcta
+import { useUser } from '../context/UserContext'; // Asegúrate de que la ruta sea correcta
 import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
-  const { setUser   } = useUser (); // Accede a setUser  desde el contexto
+  const { setUser } = useUser(); // Accede a setUser desde el contexto
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,12 +11,36 @@ const Register = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const userData = { username, email, password };
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser (userData); // Asegúrate de que setUser  sea una función
-    setMessage('¡Registro exitoso! Ahora puedes iniciar sesión.');
-    navigate('/Perfil');
+
+    try {
+      // Enviar los datos al backend
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Si el registro es exitoso, guardar los datos en localStorage
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData); // Asegúrate de que setUser esté correctamente configurado en el contexto
+
+        setMessage('¡Registro exitoso! Ahora puedes iniciar sesión.');
+        navigate('/Perfil'); // Redirigir al perfil
+      } else {
+        // Si hay un error en el registro
+        setError(data.message || 'Error al registrar el usuario');
+      }
+    } catch (err) {
+      // Manejo de errores al intentar conectar con el backend
+      setError('Hubo un error al conectar con el servidor.');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -40,6 +64,7 @@ const Register = () => {
       return;
     }
 
+    // Llamar a la función handleRegister para registrar al usuario
     handleRegister();
   };
 
@@ -83,7 +108,7 @@ const Register = () => {
         {error && <p style={styles.messageError}>{error}</p>}
         {message && <p style={styles.messageSuccess}>{message}</p>}
         <p style={styles.registerPrompt}>
-         ¿Ya tienes una cuenta?  <Link to="/login" style={styles.linkText}>Inicia sesión aquí</Link>
+          ¿Ya tienes una cuenta?  <Link to="/login" style={styles.linkText}>Inicia sesión aquí</Link>
         </p>
       </div>
     </div>
